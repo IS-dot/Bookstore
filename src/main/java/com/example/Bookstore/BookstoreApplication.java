@@ -11,6 +11,8 @@ import com.example.Bookstore.domain.Book;
 import com.example.Bookstore.domain.BookRepository;
 import com.example.Bookstore.domain.Category;
 import com.example.Bookstore.domain.CategoryRepository;
+import com.example.Bookstore.domain.User;
+import com.example.Bookstore.domain.UserRepository;
 
 @SpringBootApplication
 public class BookstoreApplication {
@@ -21,7 +23,8 @@ public class BookstoreApplication {
 	}
 
 	@Bean
-	public CommandLineRunner bookDemo(BookRepository brepository, CategoryRepository crepository) {
+	public CommandLineRunner bookDemo(BookRepository brepository, CategoryRepository crepository,
+			UserRepository urepository) {
 		return (args) -> {
 			log.info("save a couple of books");
 			crepository.save(new Category("Non-Fiction"));
@@ -33,6 +36,14 @@ public class BookstoreApplication {
 					crepository.findByCategoryName("Non-Fiction").get(0)));
 			brepository.save(new Book("Twilight", "Stephenie Meyer", "2005", "234567", 3.99,
 					crepository.findByCategoryName("Fiction").get(0)));
+
+			// Create users: admin/admin user/user
+			User user1 = new User("user", "$2a$10$1814xC2KWOz2qpyKvUpuR.Nab1qt/Ew28q.2nHhfagDxAyVcW4ciq", "USER",
+					"user@email.com");
+			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
+					"admin@email.com");
+			urepository.save(user1);
+			urepository.save(user2);
 
 			log.info("fetch all books");
 			for (Book book : brepository.findAll()) {
