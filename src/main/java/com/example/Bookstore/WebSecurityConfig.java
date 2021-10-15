@@ -15,13 +15,14 @@ import com.example.Bookstore.web.UserDetailServiceImplement;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
 	@Autowired
 	private UserDetailServiceImplement userDetailsService;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/css/**").permitAll() // Enable css when logged out
-				.and().authorizeRequests().anyRequest().authenticated().and().formLogin()
+				.and().authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login")
 				.defaultSuccessUrl("/booklist", true).permitAll().and().logout().permitAll();
 	}
 
@@ -30,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 
+	// nämä liittyi in-memory käyttäjiin
 //	@Bean
 //	@Override
 //	public UserDetailsService userDetailsService() {
